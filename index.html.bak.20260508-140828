@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Japan · Minna no Nihongo N5</title>
+<style>
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Hiragino Sans", "Yu Gothic", sans-serif; margin: 0; background: #f4f6f8; color: #222; }
+  header { background: linear-gradient(135deg, #2c3e50, #3498db); color: white; padding: 24px 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+  header h1 { margin: 0; font-size: 26px; font-weight: 700; }
+  header .sub { margin-top: 6px; font-size: 13px; opacity: 0.85; }
+  .layout { display: flex; min-height: calc(100vh - 90px); }
+  aside { width: 220px; background: white; border-right: 1px solid #e1e5e9; padding: 16px 0; overflow-y: auto; position: sticky; top: 0; height: 100vh; }
+  aside .lesson-btn { display: flex; justify-content: space-between; align-items: center; padding: 10px 18px; cursor: pointer; font-size: 14px; border-left: 3px solid transparent; transition: all 0.15s; }
+  aside .lesson-btn:hover { background: #f0f6fc; }
+  aside .lesson-btn.active { background: #e3f2fd; border-left-color: #3498db; font-weight: 600; color: #2c3e50; }
+  aside .lesson-btn .count { color: #95a5a6; font-size: 11px; }
+  main { flex: 1; padding: 24px 32px; min-width: 0; }
+  h2 { color: #34495e; margin-top: 28px; padding: 8px 14px; background: linear-gradient(90deg, #3498db, #2c3e50); color: white; border-radius: 6px; font-size: 17px; }
+  h2:first-of-type { margin-top: 16px; }
+  .lesson-title { font-size: 22px; color: #2c3e50; margin: 0 0 6px 0; }
+  .meta { color: #7f8c8d; font-size: 13px; margin-bottom: 14px; }
+  .summary { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
+  .badge { background: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .badge b { color: #c0392b; }
+  .controls { position: sticky; top: 0; background: #f4f6f8; padding: 10px 0; z-index: 10; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 12px; }
+  input[type="search"] { padding: 9px 13px; flex: 1; min-width: 200px; max-width: 380px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+  .voice-info { font-size: 12px; color: #7f8c8d; }
+  table { width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-radius: 8px; overflow: hidden; margin-bottom: 8px; }
+  thead { background: #2c3e50; color: white; }
+  th, td { padding: 10px 13px; text-align: left; border-bottom: 1px solid #ecf0f1; vertical-align: middle; }
+  th { font-weight: 600; font-size: 13px; }
+  tbody tr:hover { background: #f5fbff; }
+  .tu-vung { color: #c0392b; font-weight: 700; font-size: 16px; min-width: 150px; white-space: nowrap; }
+  .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .han-tu { color: #2980b9; font-size: 15px; }
+  .han-tu-inline { display: none; }
+  .am-han { color: #8e44ad; font-size: 12px; font-style: italic; }
+  .nghia { color: #2c3e50; font-size: 14px; }
+  .phien-am { color: #16a085; font-size: 13px; font-family: "Hiragino Sans", "Yu Gothic", sans-serif; }
+  ruby { ruby-position: over; }
+  ruby rt { color: #16a085; font-size: 0.6em; font-weight: 400; padding-bottom: 2px; }
+  .stt { color: #95a5a6; font-size: 12px; width: 36px; }
+  .audio-cell { white-space: nowrap; width: 145px; }
+  .btn-play { background: #3498db; color: white; border: none; padding: 5px 9px; border-radius: 5px; cursor: pointer; font-size: 11px; margin-right: 3px; transition: background 0.15s; }
+  .btn-play:hover { background: #2980b9; }
+  .btn-play.btn-slow { background: #16a085; }
+  .btn-play.btn-slow:hover { background: #138572; }
+  .btn-play.playing { background: #e67e22; animation: pulse 0.8s infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.6; } }
+  .empty { text-align: center; padding: 40px; color: #95a5a6; font-style: italic; }
+  .toggle-aside { display: none; }
+  @media (max-width: 760px) {
+    aside { position: fixed; left: -220px; top: 0; transition: left 0.2s; z-index: 100; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+    aside.open { left: 0; }
+    main { padding: 8px; }
+    .toggle-aside { display: inline-block; background: white; color: #2c3e50; border: 1px solid #ccc; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; margin-bottom: 10px; }
+    th, td { padding: 7px 5px; font-size: 13px; }
+    .tu-vung { font-size: 14px; }
+    .audio-cell { width: 130px; }
+    .btn-play { padding: 5px 7px; font-size: 11px; }
+    header { padding: 16px 20px; }
+    header h1 { font-size: 20px; }
+  }
+  @media (max-width: 767px) {
+    table.searchable th.han-tu,
+    table.searchable td.han-tu { display: none; }
+    .tu-vung { white-space: normal; min-width: 140px; word-break: break-word; }
+    .am-han { font-size: 11px; }
+    .nghia { font-size: 12px; }
+    .audio-cell { width: auto; }
+    .han-tu-inline { display: block; color: #2980b9; font-size: 13px; font-weight: 400; margin-top: 2px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>📚 Study Japan · Minna no Nihongo N5</h1>
+  <div class="sub">Tổng hợp 827 từ vựng + 231 mẫu câu/tên nước/tên riêng từ 25 bài · Có audio TTS</div>
+</header>
+<div class="layout">
+  <aside id="sidebar">
+    <div class="lesson-btn" data-lesson="1">Bài 1<span class="count">48</span></div>
+    <div class="lesson-btn" data-lesson="2">Bài 2<span class="count">46</span></div>
+    <div class="lesson-btn" data-lesson="3">Bài 3<span class="count">49</span></div>
+    <div class="lesson-btn" data-lesson="4">Bài 4<span class="count">60</span></div>
+    <div class="lesson-btn" data-lesson="5">Bài 5<span class="count">61</span></div>
+    <div class="lesson-btn" data-lesson="6">Bài 6<span class="count">55</span></div>
+    <div class="lesson-btn" data-lesson="7">Bài 7<span class="count">46</span></div>
+    <div class="lesson-btn" data-lesson="8">Bài 8<span class="count">60</span></div>
+    <div class="lesson-btn" data-lesson="9">Bài 9<span class="count">52</span></div>
+    <div class="lesson-btn" data-lesson="10">Bài 10<span class="count">49</span></div>
+    <div class="lesson-btn" data-lesson="11">Bài 11<span class="count">61</span></div>
+    <div class="lesson-btn" data-lesson="12">Bài 12<span class="count">53</span></div>
+    <div class="lesson-btn" data-lesson="13">Bài 13<span class="count">33</span></div>
+    <div class="lesson-btn" data-lesson="14">Bài 14<span class="count">46</span></div>
+    <div class="lesson-btn" data-lesson="15">Bài 15<span class="count">24</span></div>
+    <div class="lesson-btn" data-lesson="16">Bài 16<span class="count">58</span></div>
+    <div class="lesson-btn" data-lesson="17">Bài 17<span class="count">35</span></div>
+    <div class="lesson-btn" data-lesson="18">Bài 18<span class="count">30</span></div>
+    <div class="lesson-btn" data-lesson="19">Bài 19<span class="count">25</span></div>
+    <div class="lesson-btn" data-lesson="20">Bài 20<span class="count">22</span></div>
+    <div class="lesson-btn" data-lesson="21">Bài 21<span class="count">51</span></div>
+    <div class="lesson-btn" data-lesson="22">Bài 22<span class="count">31</span></div>
+    <div class="lesson-btn" data-lesson="23">Bài 23<span class="count">28</span></div>
+    <div class="lesson-btn" data-lesson="24">Bài 24<span class="count">18</span></div>
+    <div class="lesson-btn" data-lesson="25">Bài 25<span class="count">17</span></div>
+  </aside>
+  <main>
+    <button class="toggle-aside" id="toggle-aside">☰ Danh sách bài</button>
+    <h2 class="lesson-title" id="lesson-title">Đang tải...</h2>
+    <div class="meta" id="lesson-meta"></div>
+    <div class="summary" id="lesson-summary"></div>
+    <div class="controls">
+      <input type="search" id="search" placeholder="Tìm kiếm trong bài này...">
+      <span class="voice-info" id="voice-info">Đang tải giọng đọc...</span>
+    </div>
+    <div id="content"></div>
+  </main>
+</div>
+
+<script>
+const LESSONS = {"1": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 1 (Bản mới)", "vocab": [["わたし", "私", "TƯ", "tôi"], ["わたしたち", "私たち", "TƯ", "chúng tôi, chúng ta"], ["あなた", "", "", "anh/ chị/ ông/ bà,"], ["あのひと", "あの人", "NHÂN", "người kia, người đó"], ["あのかた", "あの方", "PHƯƠNG", "vị kia (cách nói lịch sự của あのひと)"], ["みなさん", "皆さん", "GIAI", "các anh chị, các ông bà, các bạn, quý vị"], ["～さん", "", "", "anh, chị, ông, bà"], ["～ちゃん", "", "", "(hậu tố thêm vào sau tên của trẻ em thay cho 「～さん」)"], ["～くん", "～君", "QUÂN", "hậu tố thêm vào sau tên em trai"], ["～じん", "～人", "NHÂN", "người (nước)~ví dụ 「アメリカじん」: người Mỹ)"], ["せんせい", "先生", "TIÊN SINH", "thầy/ cô"], ["きょうし", "教師", "GIÁO SƯ", "giáo viên"], ["がくせい", "学生", "HỌC SINH", "học sinh, sinh viên"], ["かいしゃいん", "会社員", "HỘI XÃ VIÊN", "nhân viên công ty"], ["しゃいん", "社員", "XÃ VIÊN", "nhân viên công ty ~ ví dụ「ＩＭＣのしゃいん」"], ["ぎんこういん", "銀行員", "NGÂN HÀNH VIÊN", "nhân viên ngân hàng"], ["いしゃ", "医者", "Y GIẢ", "bác sĩ"], ["けんきゅうしゃ", "研究者", "NGHIÊN CỨU GIẢ", "nhà nghiên cứu"], ["エンジニア", "", "", "Kỹ sư"], ["だいがく", "大学", "ĐẠI HỌC", "đại học, trường đại học"], ["びょういん", "病院", "BỆNH VIỆN", "bệnh viện"], ["でんき", "電気", "ĐIỆN KHÍ", "điện, đèn điện"], ["だれ（どなた）", "", "", "ai (「どなた」là cách nói lịch sự của「だれ」, vị nào)"], ["―さい", "－歳", "NHẤT TUẾ", "―tuổi"], ["なんさい(おいくつ）", "何歳", "HÀ TUẾ", "mấy tuổi, bao nhiêu tuổi (「おいくつ」là cách nói lịch sự của「なんさい」)"], ["はい", "", "", "vâng, dạ"], ["いいえ", "", "", "không"]], "sentences": [["失礼（しつれい）ですが", "xin lỗi,…"], ["お名前（なまえ）は？", "Tên anh/chị là gì?"], ["初（はじ）めまして。", "Rất hân hạnh được gặp anh/chị"], ["どうぞよろしく [お願（ねが）いします]。", "Rất vui khi được làm quen"], ["こちらは～さんです。", "Đây là anh/chị/ông/bà ~."], ["～から来（き）ました。", "(tôi) đến từ ~."], ["中国（ちゅうごく）", "Trung Quốc"]], "countries": [["アメリカ", "Mỹ"], ["イギリス", "Anh"], ["インド", "Ấn Độ"], ["インドネシア", "Indonesia"], ["韓国（かんこく）", "Hàn Quốc"], ["タイ", "Thái Lan"], ["ドイツ", "Đức"], ["日本（にほん）", "Nhật Bản"], ["フランス", "Pháp"], ["ブラジル", "Braxin"]], "proper_nouns": [["ＩＭＣ/パワーでんき/ブラジルエアー", "tên công ty (giả định)"], ["ＡＫＣ", "tên một tổ chức (giả định)"], ["神戸（こうべ）病院（びょういん）", "tên một bệnh viện (giả định)"], ["さくら大学（だいがく）富士（ふじ）大学（だいがく）", "Đại học Sakura(giả định)Đại học Phú Sĩ(giả định)"]]}, "2": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 2 (Bản mới)", "vocab": [["これ", "", "", "cái này, đây (vật ở gần người nói)"], ["それ", "", "", "cái đó, đó (vật ở gần người nghe)"], ["あれ", "", "", "cái kia, kia (vật ở xa cả người nói vàngười nghe)"], ["この～", "", "", "~ này"], ["その～", "", "", "~ đó"], ["あの～", "", "", "~ kia"], ["ほん", "本", "BẢN/BỔN", "sách"], ["じしょ", "辞書", "TỪ THƯ", "từ điển"], ["ざっし", "雑誌", "TẠP CHÍ", "tạp chí"], ["しんぶん", "新聞", "TÂN VĂN", "báo"], ["ノート", "", "", "vở"], ["てちょう", "手帳", "THỦ TRƯƠNG", "sổ tay"], ["めいし", "名刺", "DANH THÍCH", "danh thiếp"], ["カード", "", "", "thẻ, cạc"], ["えんぴつ", "鉛筆", "DUYÊN BÚT", "bút chì"], ["ボールペン", "", "", "bút bi"], ["シャープペンシル", "", "", "bút chì kim, bút chì bấm"], ["かぎ", "", "", "chìa khóa"], ["とけい", "時計", "THỜI KẾ", "đồng hồ"], ["かさ", "傘", "TẢN", "ô, dù"], ["かばん", "", "", "cặp sách, túi sách"], ["CD", "", "", "đĩa CD"], ["テレビ", "", "", "tivi"], ["ラジオ", "", "", "Radio"], ["カメラ", "", "", "máy ảnh"], ["コンピューター", "", "", "máy vi tính"], ["くるま", "車", "XA", "ô tô, xe hơi"], ["つくえ", "机", "KỶ", "cái bàn"], ["いす", "", "", "cái ghế"], ["チョコレート", "", "", "Socola"], ["コーヒー", "", "", "cà phê"], ["[お]みやげ", "[お]土産", "THỔ SẢN", "quà( mua khi đi xa về hoặc mang đi thămnhà người nào đó)"], ["えいご", "英語", "ANH NGỮ", "tiếng Anh"], ["にほんご", "日本語", "NHẬT BẢN NGỮ", "tiếng Nhật"], ["～ご", "～語", "NGỮ", "tiếng ~"], ["なに", "何", "HÀ", "cái gì"], ["そう", "", "", "đúng rồi"]], "sentences": [["[どうも]ありがとう[ございます]", "Xin chân thành cám ơn"], ["これからお世話せわになります", "Từ nay tôi rất mong sự giúp đỡ của anh chị"], ["こちらこそ[どうぞ] よろしく[お願ねがいします]。", "Chính tôi mới phải xin ông giúp đỡ cho"]], "countries": [["あのう", "à, ờ (dùng để biểu thị sự ngại ngùng, do dự)"], ["えっ", "hả?"], ["どうぞ", "Xin mời (dùng khi mời ai đó cái gì)"], ["そうですか", "Thế à, vậy à"], ["違ちがいます", "Không phải, không đúng, sai rồi"], ["あ", "Ôi! (Dùng khi nhận ra điều gì)"]], "proper_nouns": []}, "3": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 3 (Bản mới)", "vocab": [["ここ", "", "", "chỗ này, đây"], ["そこ", "", "", "chỗ đó, đó"], ["あそこ", "", "", "chỗ kia, kia"], ["どこ", "", "", "chỗ nào, đâu"], ["こちら", "", "", "phía này, đằng này, chỗ này, đây"], ["そちら", "", "", "phía đó, đằng đó, chỗ đó, đó"], ["あちら", "", "", "phía kia, đằng kia, chỗ kia, kia"], ["どちら", "", "", "phía nào, đằng nào, chỗ nào, đâu"], ["きょうしつ", "教室", "GIÁO THẤT", "lớp học, phòng học"], ["しょくどう", "食堂", "THỰC ĐƯỜNG", "nhà ăn"], ["じむしょ", "事務所", "SỰ VỤ SỞ", "văn phòng"], ["かいぎしつ", "会議室", "HỘI NGHỊ THẤT", "phòng họp"], ["うけつけ", "受付", "THỤ PHÓ", "bộ phận tiếp tân, phòng thường trực"], ["ロビー", "", "", "hành lang, đại sảnh"], ["へや", "部屋", "BỘ ỐC", "căn phòng"], ["トイレ（おてあらい）", "(お手洗い)", "THỦ TẨY", "nhà vệ sinh, phòng vệ sinh, toa-lét"], ["かいだん", "階段", "GIAI ĐOẠN", "cầu thang"], ["エレベーター", "", "", "thang máy"], ["エスカレーター", "", "", "thang cuốn"], ["じどうはんばいき", "自動販売機", "TỰ ĐỘNGPHIẾN MẠI CƠ", "máy bán hàng tự động"], ["でんわ", "電話", "ĐIỆN THOẠI", "máy điện thoại, điện thoại"], ["[お]くに", "[お]国", "QUỐC", "đất nước (của anh/chị)"], ["かいしゃ", "会社", "HỘI XÃ", "công ty"], ["うち", "", "", "nhà"], ["くつ", "靴", "NGOA", "giầy"], ["ネクタイ", "", "", "cà vạt"], ["ワイン", "", "", "rượu vang"], ["うりば", "売り場", "MẠI TRƯỜNG", "quầy bán (trong một cửa hàng bách hóa)"], ["ちか", "地下", "ĐỊA HẠ", "tầng hầm, dưới mặt đất"], ["―かい（－がい）", "－階", "GIAI", "tầng thứ &#8211;"], ["なんがい", "何階", "HÀ GIAI", "tầng mấy"], ["―えん", "―円", "VIÊN", "-yên"], ["いくら", "", "", "bao nhiêu tiền"], ["ひゃく", "百", "BÁCH", "trăm"], ["せん", "千", "THIÊN", "nghìn"], ["まん", "万", "VẠN", "mười nghìn, vạn"]], "sentences": [["～どうも。", "Cám ơn"], ["いらっしゃいませ。", "Xin chào quý khách, mời quý khách vào."], ["[を]を見みせてください", "cho tôi xem [~]"], ["[～を]ください", "cho tôi [~]"]], "countries": [["すみません", "Xin lỗi"], ["じゃ", "thế thì, vậy thì"], ["イタリア", "Ý"], ["スイス", "Thụy Sĩ"], ["フランス", "Pháp"], ["ジャカルタ", "Gia-các-ta"], ["バンコク", "Băng-cốc"]], "proper_nouns": [["ベルリン", "Béc-lin"], ["新大阪しんおおさか", "tên một nhà ga ở Osaka"]]}, "4": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 4 (Bản mới)", "vocab": [["おきます", "起きます", "KHỞI", "dậy, thức dậy"], ["ねます", "寝ます", "TẨM", "ngủ, đi ngủ"], ["はたらきます", "働きます", "ĐỘNG", "làm việc"], ["やすみます", "休みます", "HƯU", "nghỉ, nghỉ ngơi"], ["べんきょうします", "勉強します", "MIỄN CƯỜNG", "học"], ["おわります", "終わります", "CHUNG", "hết, kết thúc, xong"], ["デパート", "", "", "bách hóa"], ["ぎんこう", "銀行", "NGÂN HÀNH", "ngân hàng"], ["ゆうびんきょく", "郵便局", "BƯU TIỆN CỤC", "bưu điện"], ["としょかん", "図書館", "ĐỒ THƯ QUÁN", "thư viện"], ["びじゅつかん", "美術館", "MỸ THUẬT QUÁN", "bảo tàng mỹ thuật"], ["いま", "今", "KIM", "bây giờ"], ["―じ", "－時", "THỜI", "-giờ"], ["―ふん（－ぷん）", "―分", "PHÂN", "&#8211; phút"], ["はん", "半", "BÁN", "rưỡi, nửa"], ["なんじ", "何時", "HÀ THỜI", "mấy giờ"], ["なんぷん", "何分", "HÀ PHÂN", "mấy phút"], ["ごぜん", "午前", "NGỌ TIỀN", "sáng, trước 12 giờ trưa"], ["ごご", "午後", "NGỌ HẬU", "chiều, sau 12 giờ trưa"], ["あさ", "朝", "TRIỀU", "buổi sáng, sáng"], ["ひる", "昼", "TRÚ", "buổi trưa, trưa"], ["ばん（よる）", "晩(夜)", "VÃN(DẠ)", "buổi tối, tối"], ["おととい", "", "", "hôm kia"], ["きのう", "", "", "hôm qua"], ["きょう", "", "", "hôm nay"], ["あした", "", "", "ngày mai"], ["あさって", "", "", "ngày kia"], ["けさ", "", "", "sáng nay"], ["こんばん", "今晩", "KIM VÃN", "tối nay"], ["やすみ", "休み", "HƯU", "nghỉ, nghỉ phép, ngày nghỉ"], ["ひるやすみ", "昼休み", "TRÚ HƯU", "nghỉ trưa"], ["しけん", "試験", "THÍ NGHIỆM", "thi, kỳ thi, kiểm tra"], ["かいぎ", "会議", "HỘI NGHỊ", "cuộc họp, hội nghị (～を します： tổ chức cuộc họp, hội nghị)"], ["えいが", "映画", "ÁNH HỌA", "phim, điện ảnh"], ["まいあさ", "毎朝", "MỖI TRIỀU", "hàng sáng, mỗi sáng"], ["まいばん", "毎晩", "MỖI VÃN", "hàng tối, mỗi tối"], ["まいにち", "毎日", "MỖI NHẬT", "hàng ngày, mỗi ngày"], ["げつようび", "月曜日", "NGUYỆT DIỆU NHẬT", "thứ hai"], ["かようび", "火曜日", "HỎA DIỆU NHẬT", "thứ ba"], ["すいようび", "水曜日", "THỦY DIỆU NHẬT", "thứ tư"], ["もくようび", "木曜日", "MỘC DIỆU NHẬT", "thứ năm"], ["きんようび", "金曜日", "KIM DIỆU NHẬT", "thứ sáu"], ["どようび", "土曜日", "THỔ DIỆU NHẬT", "thứ bảy"], ["にちようび", "日曜日", "NHẬT DIỆU NHẬT", "chủ nhật"], ["なんようび", "何曜日", "HÀ DIỆU NHẬT", "thứ mấy"], ["～から", "", "", "~ từ"], ["～まで", "", "", "~ đến"], ["～と", "", "", "~ và (dùng để nối hai danh từ)"]], "sentences": [["大変たいへんですね", "Anh/chị vất vả quá."]], "countries": [["番号ばんごう", "số (số điện thoại, số phòng)"], ["何番なんばん", "số bao nhiêu, số mấy"], ["そちら", "ông/bà, phía ông/ phía bà"], ["ペキン", "Bắc Kinh"], ["ロサンゼルス", "Los Angeles"], ["ロンドン", "Luân Đôn"], ["あすか", "tên giả định của một nhà hàng Nhật"]], "proper_nouns": [["ニューヨーク", "New York"], ["アップル銀行ぎんこう", "ngân hàng Apple (giả định)"], ["みどり図書館としょかん", "thư viện Midori (giả định)"], ["やまと美術館びじゅつかん", "bảo tàng mỹ thuật Yamato (giả định)"]]}, "5": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 5 (Bản mới)", "vocab": [["いきます", "行きます", "HÀNH", "đi"], ["きます", "来ます", "LAI", "đến"], ["かえります", "帰ります", "QUY", "về"], ["がっこう", "学校", "HỌC HIỆU", "trường học"], ["スーパー", "", "", "siêu thị"], ["えき", "駅", "DỊCH", "ga, nhà ga"], ["ひこうき", "飛行機", "PHI HÀNH CƠ", "máy bay"], ["ふね", "船", "THUYỀN", "thuyền, tàu thủy"], ["でんしゃ", "電車", "ĐIỆN XA", "tàu điện"], ["ちかてつ", "地下鉄", "ĐỊA HẠ THIẾT", "tàu điện ngầm"], ["しんかんせん", "新幹線", "TÂN CÁN TUYẾN", "tàu Shinkansen (tàu điện siêu tốc của Nhật)"], ["バス", "", "", "xe buýt"], ["タクシー", "", "", "tắc-xi"], ["じてんしゃ", "自転車", "TỰ CHUYỂN XA", "xe đạp"], ["あるいて", "歩いて", "BỘ", "đi bộ"], ["ひと", "人", "NHÂN", "người"], ["ともだち", "友達", "HỮU ĐẠT", "bạn, bạn bè"], ["かれ", "彼", "BỈ", "anh ấy, bạn trai"], ["かのじょ", "彼女", "BỈ NỮ", "chị ấy, bạn gái"], ["かぞく", "家族", "GIA TỘC", "gia đình"], ["ひとりで", "一人で", "NHẤT NHÂN", "một mình"], ["せんしゅう", "先週", "TIÊN CHU", "tuần trước"], ["こんしゅう", "今週", "KIM CHU", "tuần này"], ["らいしゅう", "来週", "LAI CHU", "tuần sau"], ["せんげつ", "先月", "TIÊN NGUYỆT", "tháng trước"], ["こんげつ", "今月", "KIM NGUYỆT", "tháng này"], ["らいげつ", "来月", "LAI NGUYỆT", "tháng sau"], ["きょねん", "去年", "KHỨ NIÊN", "năm ngoái"], ["ことし", "", "", "năm nay"], ["らいねん", "来年", "LAI NIÊN", "năm sau"], ["ーねん", "ー年", "NIÊN", "năm &#8211;"], ["なんねん", "何年", "HÀ NIÊN", "mấy năm"], ["ーがつ", "ー月", "NGUYỆT", "tháng &#8211;"], ["なんがつ", "何月", "HÀ NGUYỆT", "tháng mấy"], ["ついたち", "１日", "NHẬT", "ngày mồng 1"], ["ふつか", "２日", "NHẬT", "ngày mồng 2, 2 ngày"], ["みっか", "３日", "NHẬT", "ngày mồng 3, 3 ngày"], ["よっか", "４日", "NHẬT", "ngày mồng 4, 4 ngày"], ["いつか", "５日", "NHẬT", "ngày mồng 5, 5 ngày"], ["むいか", "６日", "NHẬT", "ngày mồng 6, 6 ngày"], ["なのか", "７日", "NHẬT", "ngày mồng 7, 7 ngày"], ["ようか", "８日", "NHẬT", "ngày mồng 8, 8 ngày"], ["ここのか", "９日", "NHẬT", "ngày mồng 9, 9 ngày"], ["とおか", "１０日", "NHẬT", "ngày mồng 10, 10 ngày"], ["じゅうよっか", "１４日", "NHẬT", "ngày 14, 14 ngày"], ["はつか", "２０日", "NHẬT", "ngày 20, 20 ngày"], ["にじゅうよっか", "２４日", "NHẬT", "ngày 24, 24 ngày"], ["―にち", "―日", "NHẬT", "ngày -, &#8211; ngày"], ["なんにち", "何日", "HÀ NHẬT", "ngày mấy, ngày bao nhiêu, mấy ngày, bao nhiêu ngày"], ["いつ", "", "", "bao giờ, khi nào"], ["たんじょうび", "誕生日", "ĐẢN SINH NHẬT", "sinh nhật"]], "sentences": [["そうですね。", "Ừ, nhỉ."], ["[どうも]ありがとうございました。", "Xin cám ơn anh/chị rất nhiều."]], "countries": [["どういたしまして", "Không có gì."], ["―番線", "sân ga số &#8211;"], ["次の", "tiếp theo"], ["普通", "tàu thường (dừng cả ở các ga lẻ)"], ["急行", "tàu tốc hành"], ["特急", "tàu tốc hành đặc biệt"], ["甲子園", "tên một khu phố ở Osaka"]], "proper_nouns": [["大阪城", "Lâu đài Osaka, một lâu đài nổi tiếng ở Osaka"]]}, "6": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 6 (Bản mới)", "vocab": [["たべます", "食べます", "THỰC", "ăn"], ["のみます", "飲みます", "ẨM", "uống"], ["すいます[たばこを～]", "吸います[たばこを～]", "HẤP", "hút [thuốc lá]"], ["みます", "見ます", "KIẾN", "xem, nhìn, trông"], ["ききます", "聞きます", "VĂN", "nghe"], ["よみます", "読みます", "ĐỘC", "đọc"], ["かきます", "書きます", "THƯ", "viết, vẽ"], ["かいます", "買います", "MÃI", "mua"], ["とります[しゃしんを～]", "撮ります[写真を～]", "TOÁTTẢ CHÂN", "chụp [ảnh]"], ["します", "", "", "làm"], ["あいます[ともだちに～]", "会います[友達に～]", "HỘIHỮU ĐẠT", "gặp [bạn]"], ["ごはん", "", "", "cơm, bữa ăn"], ["あさごはん", "朝ごはん", "TRIỀU", "cơm sáng"], ["ひるごはん", "昼ごはん", "TRÚ", "cơm trưa"], ["ばんごはん", "晩ごはん", "VÃN", "cơm tối"], ["パン", "", "", "bánh mì"], ["たまご", "卵", "NOÃN", "trứng"], ["にく", "肉", "NHỤC", "thịt"], ["さかな", "魚", "NGƯ", "cá"], ["やさい", "野菜", "DÃ THÁI", "rau"], ["くだもの", "果物", "QUẢ VẬT", "hoa quả, trái cây"], ["みず", "水", "THỦY", "nước"], ["おちゃ", "お茶", "TRÀ", "trà (nói chung)"], ["こうちゃ", "紅茶", "HỒNG TRÀ", "trà đen"], ["ぎゅうにゅう(ミルク)", "牛乳", "NGƯU NHŨ", "sữa bò (sữa)"], ["ジュース", "", "", "nước hoa quả"], ["ビール", "", "", "bia"], ["[お]さけ", "[お]酒", "TỬU", "rượu, rượu sake"], ["たばこ", "", "", "thuốc lá"], ["てがみ", "手紙", "THỦ CHỈ", "thư"], ["レポート", "", "", "báo cáo"], ["しゃしん", "写真", "TẢ CHÂN", "ảnh"], ["ビデオ", "", "", "video, băng video, đầu video"], ["みせ", "店", "ĐIẾM", "cửa hàng, tiệm"], ["にわ", "庭", "ĐÌNH", "vườn"], ["しゅくだい", "宿題", "TÚC ĐỀ", "bài tập về nhà (～をします: làm bài tập)"], ["テニス", "", "", "quần vợt (～をします: đánh quần vợt)"], ["サッカー", "", "", "bóng đá (～をします: chơi bóng đá)"], ["[お]はなみ", "[お]花見", "HOA KIẾN", "việc ngắm hoa anh đào(～をします: ngắm hoa anh đào)"], ["なに", "何", "HÀ", "cái gì, gì"], ["いっしょに", "", "", "cùng, cùng nhau"], ["ちょっと", "", "", "một chút"], ["いつも", "", "", "luôn luôn, lúc nào cũng"], ["ときどき", "時々", "THÌ (KÉP)", "thỉnh thoảng"], ["それから", "", "", "sau đó, tiếp theo"], ["ええ", "", "", "vâng, được (cách nói thân mật của 「はい」)"], ["いいですね。", "", "", "Được đấy nhỉ./ hay quá."], ["わかりました。", "", "", "Tôi hiểu rồi/ vâng ạ."]], "sentences": [["何なんですか。", "Có gì đấy ạ?/ cái gì vậy?"], ["じゃ、また[あした]。", "Hẹn gặp lại [ngày mai]."]], "countries": [["メキシコ", "Mexico"], ["つるや", "tên nhà hàng (giả định)"], ["フランス屋や", "tên siêu thị (giả định)"], ["毎日まいにち屋や", "tên siêu thị (giả định)"]], "proper_nouns": [["大阪おおさかデパート", "bách hóa Osaka (giả định)"]]}, "7": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 7 (Bản mới)", "vocab": [["きります", "切ります", "THIẾT", "cắt"], ["おくります", "送ります", "TỐNG", "gửi"], ["あげます", "", "", "cho, tặng"], ["もらいます", "", "", "nhận"], ["かします", "貸します", "THẢI", "cho mượn, cho vay"], ["かります", "借ります", "TÁ", "mượn, vay"], ["おしえます", "教えます", "GIÁO", "dạy"], ["ならいます", "習います", "TẬP", "học, tập"], ["かけます[でんわを～]", "かけます[電話を～]", "ĐIỆN THOẠI", "gọi [điện thoại]"], ["て", "手", "THỦ", "tay"], ["はし", "", "", "đũa"], ["スプーン", "", "", "thìa"], ["ナイフ", "", "", "dao"], ["フォーク", "", "", "nĩa"], ["はさみ", "", "", "kéo"], ["パソコン", "", "", "máy vi tính cá nhân"], ["ケータイ", "", "", "điện thoại di động"], ["メール", "", "", "thư điện tử, email"], ["ねんがじょう", "年賀状", "NIÊN HẠ TRẠNG", "thiệp mừng năm mới"], ["パンチ", "", "", "cái đục lỗ"], ["ホッチキス", "", "", "cái dập ghim"], ["セロテープ", "", "", "băng dính"], ["けしゴム", "", "", "cái tẩy"], ["かみ", "紙", "CHỈ", "giấy"], ["はな", "花", "HOA", "hoa"], ["シャツ", "", "", "áo sơ mi"], ["プレゼント", "", "", "quà tặng, tặng phẩm"], ["にもつ", "荷物", "HÀ VẬT", "đồ đạc, hành lý"], ["おかね", "お金", "KIM", "tiền"], ["きっぷ", "切符", "THIẾT PHÙ", "vé"], ["クリスマス", "", "", "Giáng sinh"], ["ちち", "父", "PHỤ", "bố (dùng khi nói về bố mình)"], ["はは", "母", "MẪU", "mẹ (dùng khi nói về mẹ mình)"], ["おとうさん", "お父さん", "PHỤ", "bố (dùng khi nói về bố người khác vàdùng khi xưng hô với bố mình)"], ["おかあさん", "お母さん", "MẪU", "mẹ (dùng khi nói về mẹ người khác vàdùng khi xưng hô với mẹ mình)"], ["もう", "", "", "đã, rồi"], ["まだ", "", "", "chưa"], ["これから", "", "", "từ bây giờ, sau đây"]], "sentences": [["[～、]すてきですね。", "[~] hay nhỉ./ đẹp nhỉ."], ["いらっしゃい。", "Chào mừng anh/chị đã đến chơi."], ["どうぞ おあがりください。", "Mời anh/chị vào."], ["しつれいします。", "Xin thất lễ"], ["[～は]いかがですか。", "Anh/chị dùng [~] có được không?"], ["いただきます。", "Xin nhận ~. (cách nói dùng trước khi ăn hoặc uống)"], ["ごちそうさま［でした］", "Xin cám ơn anh/chị đã đãi tôi bữa ăn ngon (cách nói dùng sau khi ăn xong)"]], "countries": [["スペイン", "Tây Ban Nha"]], "proper_nouns": []}, "8": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 8 (Bản mới)", "vocab": [["ハンサム[な]", "", "", "đẹp trai"], ["きれい[な]", "", "", "đẹp, sạch"], ["しずか[な]", "静か[な]", "TĨNH", "yên tĩnh"], ["にぎやか[な]", "", "", "náo nhiệt"], ["ゆうめい[な]", "有名[な]", "HỮU DANH", "nổi tiếng"], ["しんせつ[な]", "親切[な]", "THÂN THIẾT", "tốt bụng, thân thiện"], ["げんき[な]", "元気[な]", "NGUYÊN KHÍ", "khỏe"], ["ひま[な]", "暇[な]", "HẠ", "rảnh rỗi"], ["べんり[な]", "便利[な]", "TIỆN LỢI", "tiện lợi"], ["すてき[な]", "", "", "đẹp, hay"], ["おおきい", "大きい", "ĐẠI", "lớn, to"], ["ちいさい", "小さい", "TIỂU", "bé, nhỏ"], ["あたらしい", "新しい", "TÂN", "mới"], ["ふるい", "古い", "CỔ", "cũ"], ["いい（よい）", "", "", "tốt"], ["わるい", "悪い", "ÁC", "xấu"], ["あつい", "暑い, 熱い", "THỬ, NHIỆT", "nóng"], ["さむい", "寒い", "HÀN", "lạnh, rét (dùng cho thời tiết)"], ["つめたい", "冷たい", "LÃNH", "lạnh, buốt (dùng cho cảm giác)"], ["むずかしい", "難しい", "NAN", "khó"], ["やさしい", "易しい", "DỊ", "dễ"], ["たかい", "高い", "CAO", "đắt, cao"], ["やすい", "安い", "AN", "rẻ"], ["ひくい", "低い", "ĐÊ", "thấp"], ["おもしろい", "", "", "thú vị, hay"], ["おいしい", "", "", "ngon"], ["いそがしい", "忙しい", "MANG", "bận"], ["たのしい", "楽しい", "LẠC, NHẠC", "vui"], ["しろい", "白い", "BẠCH", "trắng"], ["くろい", "黒い", "HẮC", "đen"], ["あかい", "赤い", "XÍCH", "đỏ"], ["あおい", "青い", "THANH", "xanh da trời"], ["さくら", "桜", "ANH", "anh đào (hoa, cây)"], ["やま", "山", "SƠN, SAN", "núi"], ["まち", "町", "ĐINH", "thị trấn, thị xã, thành phố"], ["たべもの", "食べ物", "THỰC VẬT", "đồ ăn"], ["ところ", "所", "SỞ", "nơi, chỗ"], ["りょう", "寮", "LIÊU", "kí túc xá"], ["レストラン", "", "", "nhà hàng"], ["せいかつ", "生活", "SINH HOẠT", "cuộc sống, sinh hoạt"], ["[お]しごと", "[お]仕事", "SĨ SỰ", "công việc (～をします：làm việc)"], ["どう", "", "", "thế nào"], ["どんな～", "", "", "~ như thế nào"], ["とても", "", "", "rất, lắm"], ["あまり", "", "", "không ~ lắm"], ["そして", "", "", "và, thêm nữa (dùng để nối 2 câu)"], ["～が、～", "", "", "~, nhưng ~"]], "sentences": [["お元気げんきですか。", "Anh/chị có khỏe không?"], ["そうですね。", "Thế à. Như vậy nhỉ"], ["[～、]もう一杯いっぱいいかがですか。", "Anh/ chị dùng thêm một chén/ly [~]nữa được không ạ?"], ["いいえ、けっこうです。", "Không, đủ rồi ạ."], ["もう～です[ね]。", "Đã ~ rồi nhỉ./ Đã ~ rồi, đúng không ạ?"], ["そろそろ失礼しつれいします。", "Sắp đến lúc tôi phải xin phép rồi.Đã đến lúc tôi phải về."], ["いいえ。", "Không có gì./ Không sao cả."], ["また いらっしゃってください。", "Lần sau anh/ chị lại đến chơi nhé."], ["奈良なら公園こうえん", "Công viên Nara"], ["七人しちにんの侍さむらい", "bảy chàng võ sĩ Samurai (tên phim)"]], "countries": [["上海しゃんはい", "Thượng Hải"], ["金閣寺きんかくじ", "Chùa Kinkaku-ji (chùa vàng)"]], "proper_nouns": [["富士山ふじさん", "Núi Phú Sĩ (ngọn núi cao nhất Nhật Bản)"]]}, "9": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 9 (Bản mới)", "vocab": [["わかります", "", "", "hiểu, nắm được"], ["あります", "", "", "có (sở hữu)"], ["すき[な]", "好き[な]", "HIẾU/HẢO", "thích"], ["きらい[な]", "嫌い[な]", "HIỀM", "ghét, không thích"], ["じょうず[な]", "上手[な]", "THƯỢNG THỦ", "giỏi, khéo"], ["へた[な]", "下手[な]", "HẠ THỦ", "kém"], ["のみもの", "飲み物", "ẨM VẬT", "đồ uống"], ["りょうり", "料理", "LIỆU LÝ", "món ăn, việc nấu ăn"], ["スポーツ", "", "", "thể thao (～をします：chơi thể thao)"], ["やきゅう", "野球", "DÃ CẦU", "bóng chày (～をします：chơi bóng chày)"], ["ダンス", "", "", "nhảy, khiêu vũ(～をします：nhảy, khiêu vũ)"], ["りょこう", "旅行", "LỮ HÀNH", "du lịch, chuyến du lịch"], ["おんがく", "音楽", "ÂM NHẠC/LẠC", "âm nhạc"], ["うた", "歌", "CA", "bài hát"], ["クラシック", "", "", "nhạc cổ điển"], ["ジャズ", "", "", "nhạc jazz"], ["コンサート", "", "", "buổi hòa nhạc"], ["カラオケ", "", "", "karaoke"], ["かぶき", "歌舞伎", "CA VŨ KỸ", "Kabuki (một loại ca kịch truyền thốngcủa Nhật)"], ["え", "絵", "HỘI", "tranh, hội họa"], ["じ", "字", "TỰ", "chữ"], ["かんじ", "漢字", "HÁN TỰ", "chữ hán"], ["ひらがな", "", "", "chữ Hiragana"], ["かたかな", "", "", "Chữ Katakana"], ["ローマじ", "ローマ字", "TỰ", "chữ La Mã"], ["こまかいおかね", "細かいお金", "TẾ KIM", "tiền lẻ"], ["チケット", "", "", "vé (xem hòa nhạc, xem phim)"], ["じかん", "時間", "THÌ/THỜI GIAN", "thời gian"], ["ようじ", "用事", "DỤNG SỰ", "việc bận, công chuyện"], ["やくそく", "約束", "ƯỚC THÚC", "cuộc hẹn, lời hứa"], ["アルバイト", "", "", "việc làm thêm"], ["ごしゅじん", "ご主人", "CHỦ NHÂN", "chồng (dùng khi nói về chồng người khác)"], ["おっと/しゅじん", "夫 /主人", "PHU / CHỦ NHÂN", "chồng (dùng khi nói về chồng mình)"], ["おくさん", "奥さん", "ÁO", "vợ (dùng khi nói về vợ người khác)"], ["つま/かない", "妻/家内", "THÊ / GIA NỘI", "vợ (dùng khi nói về vợ mình)"], ["こども", "子ども", "TỬ", "con cái"], ["よく", "", "", "tốt, rõ (chỉ mức độ)"], ["だいたい", "", "", "đại khái, đại thể"], ["たくさん", "", "", "nhiều"], ["すこし", "少し", "THIẾU, THIỂU", "ít, một ít"], ["ぜんぜん", "全然", "TOÀN NHIÊN", "hoàn toàn ~ không"], ["はやく", "早く, 速く", "TẢO、TỐC", "sớm, nhanh"], ["～から", "", "", "vì ~"], ["どうして", "", "", "tại sao"]], "sentences": [["いいですよ。", "Được chứ./ Được ạ."], ["残念ざんねんですね。", "Thật đáng tiếc nhỉ./ buồn nhỉ."], ["いっしょにいかがですか。", "Anh/chị cùng ~ (làm cái gì đó)với chúng tôi được không?"], ["[～は]ちょっと…。", "[~ thì] có lẽ không được rồi."], ["だめですか。", "Không được à?"], ["また 今度こんど お願ねがいします", "Hẹn Anh/Chị lần sau vậy."]], "countries": [["貸かしてください", "Hãy cho tôi mượn."], ["ああ", "Ah (cách nói khi đã gặp được đúng người trên điện thoại)"]], "proper_nouns": []}, "10": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 10 (Bản mới)", "vocab": [["あります", "", "", "có (tồn tại, dùng cho đồ vật)"], ["います", "", "", "có, ở (tồn tại, dùng cho người và động vật)"], ["いろいろ[な]", "", "", "nhiều, đa dạng"], ["おとこのひと", "男の人", "NAM NHÂN", "người đàn ông"], ["おんなのひと", "女の人", "NỮ NHÂN", "người đàn bà"], ["おとこのこ", "男の子", "NAM TỬ", "cậu con trai"], ["おんなのこ", "女の子", "NỮ TỬ", "cô con gái"], ["いぬ", "犬", "KHUYỂN", "chó"], ["ねこ", "猫", "MIÊU", "mèo"], ["パンダ", "", "", "gấu trúc"], ["ぞう", "象", "TƯỢNG", "voi"], ["き", "木", "MỘC", "cây, gỗ"], ["もの", "物", "VẬT", "vật, đồ vật"], ["でんち", "電池", "ĐIỆN TRÌ", "Pin"], ["はこ", "箱", "TƯƠNG", "hộp"], ["スイッチ", "", "", "công tắc"], ["れいぞうこ", "冷蔵庫", "LÃNH TÀN KHỐ", "tủ lạnh"], ["テーブル", "", "", "bàn"], ["ベッド", "", "", "giường"], ["たな", "棚", "BẰNG", "giá sách"], ["ドア", "", "", "cửa"], ["まど", "窓", "SONG", "cửa sổ"], ["ポスト", "", "", "hộp thư, hòm thư"], ["ビル", "", "", "toà nhà"], ["ATM", "", "", "máy rút tiền tự động ATM"], ["コンビニ", "", "", "cửa hàng tiện lợi (mở 24/24)"], ["こうえん", "公園", "CÔNG VIÊN", "công viên"], ["きっさてん", "喫茶店", "KHIẾT TRÀ ĐIẾM", "quán giải khát, quán cà-phê"], ["～や", "～屋", "ỐC", "hiệu ~, cửa hàng ~"], ["のりば", "乗り場", "THỪA TRƯỜNG", "bến xe, điểm lên xuống xe"], ["けん", "県", "HUYỆN", "tỉnh"], ["うえ", "上", "THƯỢNG", "trên"], ["した", "下", "HẠ", "dưới"], ["まえ", "前", "TIỀN", "trước"], ["うしろ", "", "", "sau"], ["みぎ", "右", "HUỮ", "phải"], ["ひだり", "左", "TẢ", "trái"], ["なか", "中", "TRUNG", "trong, giữa"], ["そと", "外", "NGOẠI", "ngoài"], ["となり", "隣", "LÂN", "bên cạnh"], ["ちかく", "近く", "CẬN", "gần"], ["あいだ", "間", "GIAN", "giữa"], ["～や～[など] ~", "", "", "~và ~, [v.v.]"]], "sentences": [["[どうも]すみません。", "Cám ơn"]], "countries": [["ナンプラー", "nampla, nước mắn"], ["コーナー", "góc, khu vực"], ["いちばん下した", "ở dưới cùng"], ["アジアストア", "tên một siêu thị (giả định)"]], "proper_nouns": [["東京とうきょうディズニーランド", "Công viên Tokyo Disneyland"]]}, "11": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 11 (Bản mới)", "vocab": [["[こどもが～] います", "[子供が～]", "TỬ CUNG", "có [con]"], ["[にほんに～] います", "[日本に～]", "NHẬT BẢN", "ở [Nhật]"], ["かかります", "", "", "mất, tốn (thời gian, tiền bạc)"], ["やすみます[かいしゃを～]", "休みます[会社を～]", "HƯUHỘI XÃ", "nghỉ [làm việc]"], ["ひとつ", "１つ", "", "một cái (dùng để đếm đồ vật)"], ["ふたつ", "２つ", "", "hai cái"], ["みっつ", "３つ", "", "ba cái"], ["よっつ", "４つ", "", "bốn cái"], ["いつつ", "５つ", "", "năm cái"], ["むっつ", "６つ", "", "sáu cái"], ["ななつ", "７つ", "", "bảy cái"], ["やっつ", "８つ", "", "tám cái"], ["ここのつ", "９つ", "", "chín cái"], ["とお", "10", "", "mười cái"], ["いくつ", "", "", "mấy cái, bao nhiêu cái"], ["ひとり", "１人", "NHÂN", "một người"], ["ふたり", "２人", "NHÂN", "hai người"], ["―にん", "－人", "NHÂN", "&#8211; người"], ["―だい", "－台", "ĐÀI", "&#8211; cái (dùng để đếm máy móc, xe cộ v.v.)"], ["―まい", "－枚", "MAI", "tờ, tấm (dùng để đếm những vật mỏngnhư giấy, con tem v.v.)"], ["―かい", "―回", "HỒI", "&#8211; lần"], ["りんご", "", "", "táo"], ["みかん", "", "", "quýt"], ["サンドイッチ", "", "", "bánh San Uých"], ["カレー[ライス]", "", "", "món [cơm] ca-ri"], ["アイスクリーム", "", "", "kem"], ["きって", "切手", "THIẾT THỦ", "tem"], ["はがき", "", "", "bưu thiếp"], ["ふうとう", "封筒", "PHONG ĐỒNG", "phong bì"], ["りょうしん", "両親", "LƯỠNG THÂN", "bố mẹ"], ["きょうだい", "兄弟", "HUYNH ĐỆ", "anh chị em"], ["あに", "兄", "HUYNH", "anh trai"], ["おにいさん", "お兄さん", "HUYNH", "anh trai (dùng cho người khác)"], ["あね", "姉", "TỶ", "chị gái"], ["おねえさん", "お姉さん", "TỶ", "chị gái (dùng cho người khác)"], ["おとうと", "弟", "ĐỆ", "em trai"], ["おとうとさん", "弟さん", "ĐỆ", "em trai (dùng cho người khác)"], ["いもうと", "妹", "MUỘI", "em gái"], ["いもうとさん", "妹さん", "MUỘI", "em gái (dùng cho người khác)"], ["がいこく", "外国", "NGOẠI QUỐC", "nước ngoài"], ["りゅうがくせい", "留学生", "LƯU HỌC SINH", "lưu học sinh, sinh viên nước ngoài"], ["クラス", "", "", "lớp học"], ["―じかん", "―時間", "THỜI GIAN", "&#8211; tiếng"], ["―しゅうかん", "―週間", "CHU GIAN", "&#8211; tuần"], ["―かげつ", "－か月", "NGUYỆT", "&#8211; tháng"], ["―ねん", "―年", "NIÊN", "&#8211; năm"], ["～ぐらい", "", "", "khoảng ~"], ["どのくらい", "", "", "bao lâu"], ["ぜんぶで", "全部で", "TOÀN BỘ", "tổng cộng"], ["みんな", "", "", "tất cả"], ["～だけ", "", "", "chỉ ~"]], "sentences": [["かしこまりました。", "Tôi đã rõ rồi ạ (thưa ông/bà)"], ["いい[お]天気てんきですね。", "Trời đẹp nhỉ."], ["お出でかけですか。", "Anh/ chị đi ra ngoài đấy à?"], ["ちょっと～まで。", "Tôi đi ~ một chút."], ["行いっていらっしゃい。", "Anh/chị đi nhé."], ["行いってきます。", "Tôi đi đây."], ["航空便こうくうびん(エアメール)", "gửi bằng đường hàng không"], ["お願ねがいします。", "Nhờ anh/chị."]], "countries": [["船便ふなびん", "gửi bằng đường biển"], ["オーストラリア", "Úc"]], "proper_nouns": []}, "12": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 12 (Bản mới)", "vocab": [["かんたん「な」", "簡単「な」", "GIẢN ĐƠN", "đơn giản, dễ"], ["ちかい", "近い", "CẬN", "gần"], ["とおい", "遠い", "VIỄN", "xa"], ["はやい", "速い, 早い", "TỐC、TẢO", "nhanh, sớm"], ["おそい", "遅い", "TRÌ", "chậm, muộn"], ["[ひとが～] おおい", "[人が～]多い", "NHÂN ĐA", "nhiều [người]"], ["[ひとが～]すくない", "[人が～]少ない", "NHÂN, THIỂU/THIẾU", "ít [người]"], ["あたたかい", "温かい,暖かい", "ÔN、NOÃN", "ấm"], ["すずしい", "涼しい", "LƯƠNG", "mát"], ["あまい", "甘い", "CAM", "ngọt"], ["からい", "辛い", "TÂN", "cay"], ["おもい", "重い", "TRỌNG", "nặng"], ["かるい", "軽い", "KHINH", "nhẹ"], ["[コーヒーが～]いい", "", "", "thích, chọn, dùng [cafe]"], ["きせつ", "季節", "QUÝ TIẾT", "mùa"], ["はる", "春", "XUÂN", "mùa xuân"], ["なつ", "夏", "HẠ", "mùa hè"], ["あき", "秋", "THU", "mùa thu"], ["ふゆ", "冬", "ĐÔNG", "mùa đông"], ["てんき", "天気", "THIÊN KHÍ", "thời tiết"], ["あめ", "雨", "VŨ", "mưa"], ["ゆき", "雪", "TUYẾT", "tuyết"], ["くもり", "曇り", "ĐÀM", "có mây"], ["ホテル", "", "", "khách sạn"], ["くうこう", "空港", "KHÔNG CẢNG", "sân bay"], ["うみ", "海", "HẢI", "biển, đại dương"], ["せかい", "世界", "THẾ GIỚI", "thế giới"], ["パーティー", "", "", "tiệc (~をします：tổ chức tiệc)"], ["[お]まつり", "[お]祭り", "TẾ", "lễ hội"], ["すきやき", "すき焼き", "THIÊU", "Sukiyaki (món thịt bò nấu rau)"], ["さしみ", "刺身", "THÍCH THÂN", "Sashimi (món gỏi cá sống)"], ["[お]すし", "", "", "Sushi"], ["てんぷら", "", "", "Tempura (món hải sản và rau chiên tẩm bột)"], ["ぶたにく", "豚肉", "ĐỒN NHỤC", "thịt heo, thịt lợn"], ["とりにく", "とり肉", "NHỤC", "thịt gà"], ["ぎゅうにく", "牛肉", "NGƯU NHỤC", "thịt bò"], ["レモン", "", "", "chanh tây"], ["いけばな", "生け花", "SINH HOA", "Nghệ thuật cắm hoa (～をします：cắm hoa)"], ["もみじ", "紅葉", "HỒNG DIỆP", "lá đỏ"], ["どちら", "", "", "cái nào"], ["どちらも", "", "", "cả hai"], ["いちばん", "", "", "nhất"], ["ずっと", "", "", "(hơn) hẳn , suốt"], ["はじめて", "初めて", "SƠ", "lần đầu tiên"]], "sentences": [["ただいま。", "Tôi đã về đây. (dùng nói khi về đến nhà)"], ["わあ、すごい人ひとですね。", "Ôi, (người) đông quá nhỉ!"], ["疲つかれました。", "Tôi mệt rồi"], ["祗園ぎおん祭まつり", "Lễ hội Gi-ôn (lễ hội nổi tiếng nhất ở Kyoto)"]], "countries": [["お帰かえりなさい", "Anh/Chị đã về đấy à.(dùng để nói với ai đó mới về đến nhà)"], ["ホンコン", "Hồng Kông"], ["シンガポール", "Singapore"], ["ＡＣＢストア", "tên một siêu thị (giả định)"]], "proper_nouns": [["ジャパン", "tên một siêu thị (giả định)"]]}, "13": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 13 (Bản mới)", "vocab": [["あそびます", "遊びます", "DU", "chơi"], ["およぎます", "泳ぎます", "VỊNH", "bơi"], ["むかえます", "迎えます", "NGHINH", "đón"], ["つかれます", "疲れます", "BÌ", "mệt"], ["けっこんします", "結婚します", "KẾT HÔN", "kết hôn, lập gia đình, cưới"], ["かいものします", "買い物します", "MÃI VẬT", "mua hàng"], ["しょくじします", "食事します", "THỰC SỰ", "ăn cơm"], ["さんぽします[こうえんを～]", "散歩します[公園を～]", "TÁN BỘCÔNG VIÊN", "đi dạo [ở công viên]"], ["たいへん「な」", "大変「な」", "ĐẠI BIẾN", "vất vả, khó khăn, khổ"], ["ほしい", "欲しい", "DỤC", "muốn có"], ["ひろい", "広い", "QUẢNG", "rộng"], ["せまい", "狭い", "HIỆP", "chật, hẹp"], ["プール", "", "", "bể bơi"], ["かわ", "川", "XUYÊN", "sông"], ["びじゅつ", "美術", "MỸ THUẬT", "mỹ thuật"], ["つり", "釣り", "ĐIẾU", "việc câu cá (~をします：câu cá)"], ["スキー", "", "", "việc trượt tuyết (~をします：trượt tuyết)"], ["しゅうまつ", "週末", "CHU MẠT", "cuối tuần"], ["[お]しょうがつ", "[お]正月", "CHÍNH NGUYỆT", "Tết"], ["～ごろ", "", "", "khoảng ~ (dùng cho thời gian)"], ["なにか", "何か", "HÀ", "cái gì đó"], ["どこか", "", "", "đâu đó, chỗ nào đó"]], "sentences": [["のどが かわきます", "(tôi) khát."], ["おなかが すきます", "(tôi) đói rồi."], ["そうしましょう。", "Nhất trí./ Chúng ta thống nhất như thế."], ["ご注文ちゅうもんは？", "Anh/Chị dùng món gì ạ"], ["[しょうしょう]お待まちください", "Xin anh/chị vui lòng đợi [một chút]."], ["～でございます。", "(cách nói lịch sự của です)"]], "countries": [["定食ていしょく", "cơm suất, cơm phần"], ["牛ぎゅうどん", "món cơm thịt bò"], ["別々べつべつに", "riêng ra/ để riêng"], ["アキックス", "tên một công ty (giả định)"], ["おはようテレビ", "tên một chương trình truyền hình (giả định)"]], "proper_nouns": []}, "14": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 14 (Bản mới)", "vocab": [["つけます", "", "", "bật (điện, máy điều hòa)"], ["けします", "消します", "TIÊU", "tắt (điện, máy điều hòa)"], ["あけます", "開けます", "KHAI", "mở (cửa, cửa sổ)"], ["しめます", "閉めます", "BẾ", "đóng (cửa, cửa sổ)"], ["いそぎます", "急ぎます", "CẤP", "vội, gấp"], ["まちます", "待ちます", "ĐÃI", "đợi, chờ"], ["もちます", "持ちます", "TRÌ", "mang, cầm"], ["とります", "取ります", "THỦ", "lấy (muối)"], ["てつだいます", "手伝います", "THỦ TRUYỀN", "giúp (làm việc)"], ["よびます", "呼びます", "HÔ", "gọi (taxi, tên)"], ["はなします", "話します", "THOẠI", "nói, nói chuyện"], ["つかいます", "使います", "SỬ", "dùng, sử dụng"], ["とめます", "止めます", "CHỈ", "dừng, đỗ"], ["みせます", "見せます", "KIẾN", "cho xem, trình"], ["おしえます[じゅうしょを～]", "教えます[住所を～]", "TRÚ SỞ GIÁO", "nói, cho biết [địa chỉ]"], ["すわります", "座ります", "TỌA", "ngồi"], ["たちます", "立ちます", "LẬP", "đứng"], ["はいります[きっさてんに～]", "入ります[喫茶店に～]", "NHẬPKHIẾT TRÀ ĐIẾM", "vào [quán giải khát]"], ["でます[きっさてんを～]", "出ます[喫茶店に～]", "XUẤTKHIẾT TRÀ ĐIẾM", "ra, ra khỏi [quán giải khát]"], ["ふります[あめが～]", "降ります[雨が～]", "GIÁNGVŨ", "rơi [mưa~]"], ["コピーします", "", "", "copy"], ["でんき", "電気", "ĐIỆN KHÍ", "điện, đèn điện"], ["エアコン", "", "", "máy điều hòa"], ["パスポート", "", "", "hộ chiếu"], ["なまえ", "名前", "DANH TIỀN", "tên"], ["じゅうしょ", "住所", "TRÚ SỞ", "địa chỉ"], ["ちず", "地図", "ĐỊA ĐỒ", "bản đồ"], ["しお", "塩", "DIÊM", "muối"], ["さとう", "砂糖", "SA ĐƯỜNG", "đường"], ["もんだい", "問題", "VẤN ĐỀ", "câu hỏi, vấn đề"], ["こたえ", "答え", "ĐÁP", "câu trả lời"], ["よみかた", "読み方", "ĐỘC PHƯƠNG", "cách đọc"], ["～かた", "～方", "PHƯƠNG", "cách ~"], ["まっすぐ", "", "", "thẳng"], ["ゆっくり", "", "", "chậm, thong thả, thoải mái"], ["すぐ", "", "", "ngay, lập tức"], ["また", "", "", "lại (~đến)"], ["あとで", "", "", "sau"], ["もう すこし", "もう少し", "THIẾU", "thêm một chút nữa thôi"], ["もう～", "", "", "thêm~"]], "sentences": [["あれ？", "Ô! (câu cảm thán khi phát hiện hoặc thấy cái gì đó lạ, hoặc bất ngờ)"], ["信号しんごうを右みぎへ曲まがってください", "Anh/ Chị rẽ phải ở chổ đèn tín hiệu."], ["これでお願ねがいします", "Gởi anh tiền này."]], "countries": [["さあ", "thôi/nào (dùng để thúc giục hoặc khuyến khích ai làm gì.)"], ["お釣つり", "tiền lẻ"]], "proper_nouns": [["みどり町ちょう", "tên một thành phố (giả định)"]]}, "15": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 15 (Bản mới)", "vocab": [["おきます", "置きます", "TRÍ", "đặt, để"], ["つくります", "作ります,造ります", "TÁC,TẠO", "làm, chế tạo, sản xuất"], ["うります", "売ります", "MẠI", "bán"], ["しります", "知ります", "TRI", "biết"], ["すみます", "住みます", "TRÚ, TRỤ", "sống, ở"], ["けんきゅうします", "研究します", "NGHIÊN CỬU", "nghiên cứu"], ["しりょう", "資料", "TƯ LIỆU", "tài liệu, tư liệu"], ["カタログ", "", "", "ca-ta-lô"], ["じこくひょう", "時刻表", "THỜI KHẮC BIỂU", "bảng giờ tàu chạy"], ["ふく", "服", "PHỤC", "quần áo"], ["せいひん", "製品", "CHẾ PHẨM", "sản phẩm"], ["ソフト", "", "", "phần mềm"], ["でんしじしょ", "電子辞書", "ĐIỆN TỪ TỪ ĐIỂN", "kim từ điển"], ["けいざい", "経済", "KINH TẾ", "kinh tế"], ["しやくしょ", "市役所", "THỊ DỊCH SỞ", "tòa thị chính"], ["こうこう", "高校", "CAO HIỆU", "trường trung học phổ thông, trường cấp 3"], ["はいしゃ", "歯医者", "XỈ Y GIẢ", "nha sĩ"], ["どくしん", "独身", "ĐỘC THÂN", "độc thân"], ["すみません", "", "", "xin lỗi"]], "sentences": [["思おもい出だします", "nhớ lại, hồi tưởng"], ["日本橋にっぽんばし", "tên một khu phố buôn bán ở Osaka"], ["みんなのインタビュー", "tên chương trình truyền hình (giả định)"]], "countries": [["皆みなさん", "các anh chị, các ông bà, các bạn, quý vị"], ["いらっしゃいます", "kính ngữ của 「います」"]], "proper_nouns": []}, "16": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 16 (Bản mới)", "vocab": [["のります[でんしゃに～]", "乗ります[電車に～]", "THỪAĐIỆN XA", "đi, lên [tàu]"], ["おります[でんしゃを～]", "降ります[電車を～]", "GIÁNGĐIỆN XA", "xuống [tàu]"], ["のりかえます", "乗り換えます", "THỪA HOÁN", "chuyển, đổi (tàu)"], ["あびます[シャワーを～]", "浴びます[シャワーを～]", "DỤC", "tắm [vòi hoa sen]"], ["いれます", "入れます", "NHẬP", "cho vào, bỏ vào"], ["だします", "出します", "XUẤT", "lấy ra, đưa ra, gửi"], ["おろします[おかねを～]", "下ろします[お金を～]", "HẠKIM", "rút [tiền]"], ["はいります[だいがくに～]", "入ります[大学に～]", "NHẬPĐẠI HỌC", "vào, nhập học [đại học]"], ["でます[だいがくを～]", "出ます[大学を～]", "XUẤTĐẠI HỌC", "ra, tốt nghiệp [đại học]"], ["おします", "押します", "ÁP", "bấm, ấn (nút)"], ["のみます", "飲みます", "ẨM", "uống (bia, rượu)"], ["はじめます", "始めます", "THỦY", "bắt đầu"], ["けんがくします", "見学します", "KIẾN HỌC", "tham quan kiến tập"], ["でんわします", "電話します", "ĐIỆN THOẠI", "gọi điện thoại"], ["わかい", "若い", "NHƯỢC", "trẻ"], ["ながい", "長い", "TRƯỜNG", "dài"], ["みじかい", "短い", "ĐOẢN", "ngắn"], ["あかるい", "明るい", "MINH", "sáng"], ["くらい", "暗い", "ÁM", "tối"], ["からだ", "体", "THỂ", "người, cơ thể"], ["あたま", "頭", "ĐẦU", "đầu"], ["かみ", "髪", "PHÁT", "tóc"], ["かお", "顔", "NHAN", "mặt"], ["め", "目", "MỤC", "mắt"], ["みみ", "耳", "NHĨ", "tai"], ["はな", "鼻", "TỊ", "mũi"], ["くち", "口", "KHẨU", "miệng"], ["は", "歯", "XỈ", "răng"], ["おなか", "", "", "bụng"], ["あし", "足", "TÚC", "chân"], ["せ", "背", "BỐI", "chiều cao (cơ thể)"], ["サービス", "", "", "dịch vụ"], ["ジョギング", "", "", "việc chạy bộ (~をします: chạy bộ)"], ["シャワー", "", "", "vòi hoa sen"], ["みどり", "緑", "LỤC", "màu xanh lá cây"], ["[お]てら", "[お]寺", "TỰ", "chùa"], ["じんじゃ", "神社", "THẦN XÃ", "đền thờ đạo thần"], ["一いちばん", "一番", "PHIÊN", "số ―"], ["どうやって", "", "", "làm thế nào~"], ["どの～", "", "", "cái nào~ (dùng với trường hợp từ ba thứ trở lên)"], ["どれ", "", "", "cái nào~ (dùng với trường hợp ba cái hoặc nhiều hơn)"]], "sentences": [["すごいですね。", "Thật là tuyệt vời. / Kinh quá nhỉ."], ["[いいえ、]まだまだです。", "[không,] tôi còn kém lắm.(cách nói khiêm nhường khi ai đó khen)"], ["お引ひき出だしですか。", "Anh/ chị rút tiền ạ?"], ["暗証あんしょう番号ばんごう", "mã số bí mật (mật khẩu)"]], "countries": [["まず", "trước hết, đầu tiên"], ["次つぎに", "tiếp theo, sau đó"], ["キャッシュカード", "thẻ ngân hàng, thẻ ATM"], ["金額きんがく", "số tiền, khoản tiền"], ["確認かくにん", "sự xác nhận, sự kiểm tra (~します：xác nhận)"], ["ボタン", "nút"], ["ＪＲ", "công ty đường sắt Nhật Bản"], ["雪祭ゆきまつり", "Lễ hội tuyết"], ["バンドン", "Bandung (ở Indonesia)"], ["フランケン", "Franken (ở Đức)"], ["ベラクルス", "Veracruz (ở Mexico)"], ["梅田うめだ", "tên một quận ở Osaka"]], "proper_nouns": [["大学だいがく前まえ", "tên một điểm dừng xe buýt (giả tưởng)"]]}, "17": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 17 (Bản mới)", "vocab": [["おぼえます", "覚えます", "GIÁC", "nhớ"], ["わすれます", "忘れます", "VONG", "quên"], ["なくします", "", "", "mất, đánh mất"], ["はらいます", "払います", "PHẤT", "trả tiền"], ["かえします", "返します", "PHẢN", "trả lại"], ["でかけます", "出かけます", "XUẤT", "ra ngoài"], ["ぬぎます", "脱ぎます", "THOÁT", "cởi (quần áo, giầy)"], ["もっていきます", "持って行きます", "TRÌ HÀNH", "mang đi, mang theo"], ["もってきます", "持って来ます", "TRÌ LAI", "mang đến"], ["しんぱいします", "心配します", "TÂM PHỐI", "lo lắng"], ["ざんぎょうします", "残業します", "TÀN NGHIỆP", "làm thêm, làm quá giờ"], ["しゅっちょうします", "出張します", "XUẤT TRƯƠNG", "đi công tác"], ["のみます[くすりを～]", "飲みます[薬を～]", "ẨMDƯỢC", "uống [thuốc]"], ["はいります[おふろに～]", "入ります[おふろに～]", "NHẬP", "tắm bồn [vào bồn tắm]"], ["たいせつ[な]", "大切[な]", "ĐẠI THIẾT", "quan trọng, quý giá"], ["だいじょうぶ[な]", "大丈夫[な]", "ĐẠI TRƯỢNG PHU", "không sao, không có vấn đề gì"], ["あぶない", "危ない", "NGUY", "nguy hiểm"], ["きんえん", "禁煙", "CẤM YÊN", "cấm hút thuốc"], ["[けんこう]ほけんしょう", "[健康]保険証", "KIỆN KHANG", "thẻ bảo hiểm [y tế]"], ["ねつ", "熱", "NHIỆT", "sốt"], ["びょうき", "病気", "BỆNH KHÍ", "ốm, bệnh"], ["くすり", "薬", "DƯỢC", "thuốc"], ["[お]ふろ", "", "", "bồn tắm"], ["うわぎ", "上着", "THƯỢNG TRƯỚC", "áo khoác"], ["したぎ", "下着", "HẠ TRƯỚC", "quần áo lót"], ["２，３にち", "２，３日", "NHẬT", "2,3 ngày, vài ngày"], ["２，３～", "", "", "vài~ (“~” là hậu tố đếm)"], ["～までに", "", "", "trước ~ (chỉ thời hạn)"], ["ですから", "", "", "vì thế, vì vậy, do đó"]], "sentences": [["どうしましたか。", "Có vần đề gì?Anh/chị bị làm sao?"], ["[～が]痛いたいです。", "Tôi bị đau [~]."]], "countries": [["のど", "họng"], ["かぜ", "cảm, cúm"], ["それから", "và, sau đó"], ["お大事だいじに", "Anh/chị nhớ giữ gìn sức khỏe.(câu nói với người ốm,bị bệnh)"]], "proper_nouns": []}, "18": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 18 (Bản mới)", "vocab": [["できます", "", "", "có thể"], ["あらいます", "洗います", "TẨY", "rửa"], ["ひきます", "弾きます", "ĐÀN, ĐẠN", "chơi (nhạc cụ)"], ["うたいます", "歌います", "CA", "hát"], ["あつめます", "集めます", "TẬP", "sưu tầm, thu thập"], ["すてます", "捨てます", "XẢ", "vứt, bỏ đi"], ["かえます", "換えます", "HOÁN", "đổi"], ["うんてんします", "運転します", "VẬN CHUYỂN", "lái"], ["よやくします", "予約します", "DỰ ƯỚC", "đặt chỗ, đặt trước"], ["ピアノ", "", "", "đàn Piano"], ["―メートル", "", "", "― mét"], ["げんきん", "現金", "HIỆN KIM", "tiền mặt"], ["しゅみ", "趣味", "THÚ VỊ", "sở thích, thú vui"], ["にっき", "日記", "NHẬT KÝ", "nhật ký"], ["[お]いのり", "[お]祈り", "KỲ", "việc cầu nguyện (～をします：cầu nguyện)"], ["かちょう", "課長", "KHOA TRƯỞNG", "tổ trưởng"], ["ぶちょう", "部長", "BỘ TRƯỞNG", "trưởng phòng"], ["しゃちょう", "社長", "XÃ TRƯỞNG", "giám đốc"], ["どうぶつ", "動物", "ĐỘNG VẬT", "động vật"], ["うま", "馬", "MÃ", "ngựa"], ["インターネット", "", "", "internet"]], "sentences": [["それはおもしろいですね。", "Hay thật nhỉ."], ["ほんとうですか。", "Thật không ạ?"]], "countries": [["特とくに", "đặt biệt là"], ["へえ", "thế à! (dùng để biểu thị sự ngạc nhiên hoặc quan tâm)"], ["なかなか", "khó mà~, mãi mà (dùng với thể phủ định)"], ["ぜひ", "nhất định, rất"], ["故郷ふるさと", "Furusato(tên bài hát có nghĩa &#8220;quê nhà&#8221;)"], ["ビートルズ", "Beatles, một băng nhạc nỗi tiếng nước Anh"], ["秋葉原あきはばら", "một quận ở Tokyo"]], "proper_nouns": []}, "19": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 19 (Bản mới)", "vocab": [["のぼります[やまに～]", "登ります[山に～]", "SƠN ĐĂNG", "leo [núi]"], ["とまります[ホテルに～]", "泊まります[ホテルに～]", "BẠC", "trọ [ở khách sạn]"], ["そうじします", "掃除します", "TẢO TRỪ", "dọn vệ sinh"], ["せんたくします", "洗濯します", "TẨY TRẠC", "giặt"], ["なります", "", "", "trở thành, trở nên"], ["ねむい", "眠い", "MIÊN", "buồn ngủ"], ["つよい", "強い", "CƯỜNG", "mạnh"], ["よわい", "弱い", "NHƯỢC", "yếu"], ["ゴルフ", "", "", "gôn (～をします:chơi gôn)"], ["すもう", "相撲", "", "vật Sumo"], ["おちゃ", "お茶", "TRÀ", "trà"], ["ひ", "日", "NHẬT", "ngày"], ["ちょうし", "調子", "ĐIỀU TỬ", "tình trạng, trạng thái"], ["いちど", "一度", "NHẤT ĐỘ", "một lần"], ["いちども", "一度も", "NHẤT ĐỘ", "chưa lần nào"], ["だんだん", "", "", "dần dần"], ["もうすぐ", "", "", "sắp"], ["おかげさまで", "", "", "nhờ ơn anh/ chị mà ~ ; Nhờ trời ~"], ["でも", "", "", "nhưng"]], "sentences": [["葛飾かつしか 北斎ほくさい", "Katsushika Hokusai (1760-1849), một họa sĩ nổi tiếng thời Edo"]], "countries": [["乾杯かんぱい", "nâng cốc!/cạn chén"], ["ダイエット", "việc ăn kiêng, chế độ giảm cân(～をします:ăn kiêng)"], ["無理むり[な]", "không thể, quá sức"], ["体からだにいい", "tốt cho sức khỏe"]], "proper_nouns": [["東京とうきょうスカイツリー", "Tokyo Sky Tree (tháp truyền hình có đài ngắm)"]]}, "20": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 20 (Bản mới)", "vocab": [["いります[ビザが～]", "要ります[ビザが～]", "YẾU", "cần [thị thực (visa)]"], ["しらべます", "調べます", "ĐIỀU", "tìm hiểu, điều tra, xem"], ["しゅうりします", "修理します", "TU LÝ", "sửa chữa, tu sửa"], ["ぼく", "僕", "BỘC", "tớ (cách xưng thân mật của わたし được dùng bởi nam giới)"], ["きみ", "君", "QUÂN", "cậu, bạn (cách gọi thân mật của あなたdùng cho người ngang hàng hoặc ít tuổi hơn.)"], ["～くん", "～君", "QUÂN", "anh~, cậu~ (cách gọi thân mật dùngcho nam giới, cùng nghĩa với 「～さん」)"], ["うん", "", "", "ừ (cách nói thân mật của 「はい」)"], ["ううん", "", "", "không (cách nói thân mật của 「いいえ」)"], ["ことば", "", "", "từ, tiếng"], ["きもの", "着物", "TRƯỚC VẬT", "Kimono (trang phục truyền thống của Nhật Bản)"], ["ビザ", "", "", "thị thực, Visa"], ["はじめ", "始め", "THỦY", "ban đầu, đầu tiên"], ["おわり", "終わり", "CHUNG", "kết thúc"], ["こっち", "", "", "phía này, chỗ này (cách nói thân mật của 「こちら」)"], ["そっち", "", "", "phía đó, chỗ đó (cách nói thân mật của 「そちら」)"], ["あっち", "", "", "phía kia, chỗ kia (cách nói thân mật của 「あちら」)"], ["どっち", "", "", "cái nào, phía nào, đâu (cách nói thân mật của 「どちら」)"], ["みんなで", "", "", "mọi người cùng"], ["～けど", "", "", "nhưng (cách nói thân mật của 「が」)"], ["おなかがいっぱいです", "", "", "(Tôi) no rồi"]], "sentences": [], "countries": [["よかったら", "Nếu anh/chị thích thì"], ["いろいろ", "nhiều thứ"]], "proper_nouns": []}, "21": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 21 (Bản mới)", "vocab": [["おもいます", "思います", "TƯ", "nghĩ"], ["いいます", "言います", "NGÔN", "nói"], ["かちます", "勝ちます", "THẮNG", "thắng"], ["まけます", "負けます", "PHỤ", "thua"], ["あります[おまつりが～]", "あります[お祭りが～]", "TẾ", "được tổ chức, diễn ra, có [lễ hội~]"], ["やくにたちます", "役に立ちます", "DỊCH LẬP", "giúp ích"], ["うごきます", "動きます", "", "chuyển động, chạy"], ["やめます[かいしゃを～]", "[会社を～]", "HỘI XÃ", "bỏ, thôi [việc công ty]"], ["きをつけます", "気をつけます", "KHÍ", "chú ý, bảo trọng"], ["りゅうがくします", "留学します", "LƯU HỌC", "du học"], ["むだ[な]", "", "", "lãng phí, vô ích"], ["ふべん[な]", "不便[な]", "BẤT TIỆN", "bất tiện"], ["すごい", "", "", "ghê quá, giỏi quá"], ["ほんとう", "", "", "sự thật"], ["うそ", "", "", "giả dối, nói dối"], ["じどうしゃ", "自動車", "TỰ ĐỘNG XA", "ô tô, xe hơi"], ["こうつう", "交通", "GIAO THÔNG", "giao thông"], ["ぶっか", "物価", "VẬT GIÁ", "giá cả, mức giá, vật giá"], ["ほうそう", "放送", "PHÓNG TỐNG", "phát, phát thanh"], ["ニュース", "", "", "tin tức, bản tin"], ["アニメ", "", "", "phim hoạt hình ( Nhật Bản)"], ["マンガ", "", "", "truyện tranh"], ["デザイン", "", "", "thiết kế"], ["ゆめ", "夢", "MỘNG", "giấc mơ"], ["てんさい", "天才", "THIÊN TÀI", "thiên tài"], ["しあい", "試合", "THÍ HỢP", "trận đấu"], ["いけん", "意見", "Ý KIẾN", "ý kiến"], ["[お]はなし", "[お]話", "THOẠI", "câu chuyện, bài nói chuyện(～をします: Nói chuyện)"], ["ちきゅう", "地球", "ĐỊA CẦU", "trái đất"], ["つき", "月", "NGUYỆT", "mặt trăng"], ["さいきん", "最近", "TỐI CẬN", "gần đây"], ["たぶん", "", "", "chắc, có thể"], ["きっと", "", "", "chắc chắn, nhất định"], ["ほんとうに", "", "", "thật sự"], ["そんなに", "", "", "(không)~ lắm"], ["～について", "", "", "về~"]], "sentences": [["久ひさしぶりですね。", "Đã lâu không gặp nhỉ."], ["～でも飲のみませんか。", "Anh/chị uống~ (cà-phê, rựu hay cái gì đó) nhé."], ["帰かえらないと…。", "Tôi phải về bây giờ không thì …"], ["天神てんじん祭まつり", "Lễ hội Tenjin ( ở Osaka)"], ["キャプテン・クック", "thuyền trưởng Cook (James Cook 1728 – 79)"]], "countries": [["もちろん", "tất nhiên"], ["アインシュタイン", "Albert Einstein (1879-1955)"], ["ガガーリン", "Yuri Alekseyevich Gagarin (1934-1968)"], ["ガリレオ", "Galileo Galilei (1564-1642)"], ["キング牧師ぼくし", "Mục sư Martin Luther King, JR. (1929-1968)"], ["フランクリン", "Benjamin Franklin(1706-1790)"], ["かぐや姫ひめ", "công chúa Kaguya"], ["吉野よしの山やま", "núi Yoshino ( ở tỉnh Nara)"], ["カンガルー", "con kăng-gu-ru, chuột túi"], ["ヨーネン", "tên công ty (giả định)"]], "proper_nouns": []}, "22": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 22 (Bản mới)", "vocab": [["きます", "着ます", "TRƯỚC", "mặc [áo sơ mi, v.v.]"], ["はきます", "", "NGOA", "đi, mặc [giầy, quần âu, v.v.]"], ["かぶります", "", "MẠO TỬ", "đội [mũ, v.v.]"], ["かけます[めがねを～]", "[眼鏡を～]", "NHÃN KÍNH", "đeo [kính]"], ["します", "", "", "đeo [cà vạt]"], ["うまれます", "生まれます", "SINH", "sinh ra"], ["わたしたち", "", "", "chúng tôi, chúng ta"], ["コート", "", "", "áo khoác"], ["セーター", "", "", "áo len"], ["スーツ", "", "", "com-lê"], ["ぼうし", "帽子", "MẠO TỬ", "mũ"], ["めがね", "眼鏡", "NHÃN KÍNH", "kính"], ["ケーキ", "", "", "bánh ngọt"], ["[お]べんとう", "お弁当", "BIỆN ĐƯƠNG", "cơm hộp"], ["ロボット", "", "", "ro bốt"], ["ユーモア", "", "", "sự hài hước"], ["つごう", "都合", "ĐÔ HỢP", "(sự) thích hợp"], ["よく", "", "", "thường, hay"]], "sentences": [["おめでとう [ございます]。", "Chúc mừng."], ["万里ばんりの長城ちょうじょう", "Vạn Lý Trường Thành"], ["みんなのアンケート", "tiêu đề bài điều tra (giả định)"]], "countries": [["えーと", "ừ, à"], ["お探さがしですか", "Anh/chị tìm ~ à?"], ["では", "Thế/Vậy (nhé)"], ["こちら", "cái này (cách nói lịch sự của [これ])"], ["家賃やちん", "tiền thuê nhà"], ["ダイニングキチン", "bếp kèm phòng ăn"], ["和室わしつ", "phòng kiểu Nhật"], ["押おし入いれ", "Chổ để chăn gối trong một căn phòng kiểu Nhật"], ["布団ふとん", "chăn, đệm"], ["パリ", "Pari"]], "proper_nouns": []}, "23": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 23 (Bản mới)", "vocab": [["ききます[せんせいに～]", "聞きます[先生に～]", "VĂNTIÊN SINH", "hỏi [giáo viên]"], ["まわします", "回します", "HỒI", "vặn (núm)"], ["ひきます", "引きます", "DẪN", "kéo"], ["かえます", "変えます", "BIẾN", "đổi"], ["さわります[ドアに～]", "触ります", "XÚC", "sờ, chạm vào [cửa]"], ["でます[おつりが～]", "出ます[お釣りが～]", "XUẤTĐIẾU", "[tiền thừa] ra, chạy ra"], ["あるきます", "歩きます", "BỘ", "đi bộ"], ["わたります[はしを～]", "渡ります[橋を～]", "ĐỘKIỀU", "qua, đi qua [cầu]"], ["まがります[みぎへ～]", "曲がります[右へ～]", "KHÚCHỮU", "rẽ, quẹo [phải]"], ["さびしい", "寂しい", "TỊCH", "buồn, cô đơn"], ["[お]ゆ", "[お]湯", "THANG", "nước nóng"], ["おと", "音", "ÂM", "âm thanh"], ["サイズ", "", "", "cỡ, kích thước"], ["こしょう", "故障", "CỐ CHƯỚNG", "hỏng (~します：bị hỏng)"], ["みち", "道", "ĐẠO", "đường"], ["こうさてん", "交差点", "GIAO SAI ĐIỂM", "ngã tư"], ["しんごう", "信号", "TÍN HIỆU", "đèn tín hiệu"], ["かど", "角", "GIÁC", "góc"], ["はし", "橋", "KIỀU", "cầu"], ["ちゅうしゃじょう", "駐車場", "TRÚ XA TRƯỜNG", "bãi đỗ xe"], ["たてもの", "建物", "KIẾN VẬT", "tòa nhà"], ["なんかいも", "何回も", "HÀ HỒI", "nhiều lần"], ["―め", "―目", "MỤC", "thứ &#8211; , số &#8211; (biểu thị thứ tự)"]], "sentences": [], "countries": [["しょうとくたいし", "Thái tử Shotoku (574 – 622)"], ["ほうりゅうじ", "Chùa Horyu-ji (một ngôi chùa ở Nara dohoàng tử Shotoku xây vào thế kỷ thứ 7)"], ["げんきちゃ", "tên một loại trà (giả tưởng)"], ["ほんだえき", "tên một nhà ga (giả tưởng)"], ["としょかんまえ", "tên một bến xe buýt (giả tưởng"]], "proper_nouns": []}, "24": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 24 (Bản mới)", "vocab": [["くれます", "", "", "cho, tặng (tôi)"], ["なおします", "直します", "TRỰC", "chữa, sửa"], ["つれていきます", "連れて行きます", "LIÊN HÀNH", "dẫn đi"], ["つれてきます", "連れて来ます", "LIÊN LAI", "dẫn đến"], ["おくります[ひとを～]", "送ります[人を～]", "TỐNGNHÂN", "đưa đi, đưa đến, tiễn [một ai đó]"], ["しょうかいします", "紹介します", "THIỆU GIỚI", "giới thiệu"], ["あんないします", "案内します", "ÁN NỘI", "hướng dẫn, giới thiệu, dẫn đường"], ["せつめいします", "説明します", "THUYẾT MINH", "giải thích, trình bày"], ["おじいさん／おじいちゃん", "", "", "ông nội, ông ngoại, ông"], ["おばあさん／おばあちゃん", "", "", "bà nội, bà ngoại, bà"], ["じゅんび", "準備", "CHUẨN BỊ", "chuẩn bị [～します:chuẩn bị]"], ["ひっこし", "引っ越し", "DẪN VIỆT", "sự chuyển nhà"], ["[お]かし", "[お]菓子", "QUẢ TỬ", "bánh kẹo"], ["ホームステイ", "", "", "homestay"], ["ぜんぶ", "全部", "TOÀN BỘ", "toàn bộ, tất cả"], ["じぶんで", "自分で", "TỰ PHÂN", "tự (mình)"]], "sentences": [], "countries": [["ほかに", "ngoài ra, bên cạnh đó"], ["母ははの日ひ", "Ngày của Mẹ"]], "proper_nouns": []}, "25": {"title": "Tổng Hợp Từ Vựng Minano Nihongo Bài 25 (Bản mới)", "vocab": [["かんがえます", "考えます", "KHẢO", "nghĩ, suy nghĩ"], ["つきます", "着きます", "TRƯỚC", "đến"], ["とります[としを～]", "取ります[年を～]", "THỦNIÊN", "thêm [tuổi]"], ["たります", "足ります", "ĐỦ", "đủ"], ["いなか", "田舎", "ĐIỀN XÁ", "quê, nông thôn"], ["チャンス", "", "", "cơ hội"], ["おく", "億", "ỨC", "một trăm triệu"], ["もし[～たら]", "", "", "nếu [~ thì]"], ["いみ", "意味", "Ý VỊ", "nghĩa, ý nghĩa"]], "sentences": [["[いろいろ]お世話せわになりました。", "Anh/chị đã giúp tôi (nhiều)."], ["どうぞお元気げんきで。", "Chúc anh/chị mạnh khỏe."]], "countries": [["もしもし", "A-lô"], ["転勤てんきん", "việc chuyển địa điểm làm việc(～します：chuyển địa điểm làm việc)"], ["こと", "việc , chuyện (~の こと: việc ~)"], ["暇ひま", "thời gian rảnh"], ["頑張がんばります", "cố, cố gắng"], ["ベトナム", "Việt Nam"]], "proper_nouns": []}};
+
+// === Render ===
+const contentEl = document.getElementById('content');
+const titleEl = document.getElementById('lesson-title');
+const metaEl = document.getElementById('lesson-meta');
+const summaryEl = document.getElementById('lesson-summary');
+const searchEl = document.getElementById('search');
+
+function escapeAttr(s) { return s.replace(/"/g, '&quot;').replace(/'/g, "\\'"); }
+
+function cleanForSpeak(text, dropBrackets) {
+  let s = text.replace(/[（(][^)）]*[)）]/g, '');
+  s = dropBrackets
+    ? s.replace(/[\[［][^\]］]*[\]］]/g, '')
+    : s.replace(/[\[\]［］]/g, '');
+  return s.replace(/\s+/g, ' ').trim();
+}
+
+const KANJI_RE = /([㐀-䶿一-鿿々ヶ]+)[（(]([぀-ゟー]+)[)）]/g;
+
+function toRuby(text) {
+  return text.replace(KANJI_RE, '<ruby>$1<rt>$2</rt></ruby>');
+}
+
+function toHiragana(text) {
+  return text
+    .replace(KANJI_RE, '$2')
+    .replace(/[\[\]［］]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+function audioCell(text, dropBrackets) {
+  const safe = escapeAttr(cleanForSpeak(text, dropBrackets));
+  return `<td class="audio-cell">
+    <button class="btn-play" data-text="${safe}" data-rate="0.75">▶︎ 0.75×</button><br>
+    <button class="btn-play btn-slow" data-text="${safe}" data-rate="0.3">▶︎ 0.3×</button><br>
+  </td>`;
+}
+
+function renderTable4(rows) {
+  let h = '<div class="table-wrap"><table class="searchable"><thead><tr><th class="stt">#</th><th>Từ vựng</th><th>Phiên âm</th><th class="han-tu">Hán tự</th><th>Âm Hán</th><th>Nghĩa</th><th>Audio</th></tr></thead><tbody>';
+  rows.forEach((r, i) => {
+    const speak = r[0] || r[1];
+    const hira = cleanForSpeak(r[0], true);
+    const showHira = hira && hira !== r[0].trim();
+    h += `<tr><td class="stt">${i+1}</td><td class="tu-vung">${r[0]}${r[1] ? `<span class="han-tu-inline">${r[1]}</span>` : ''}</td><td class="phien-am">${showHira ? hira : ''}</td><td class="han-tu">${r[1]}</td><td class="am-han">${r[2]}</td><td class="nghia">${r[3]}</td>${audioCell(speak, true)}</tr>`;
+  });
+  return h + '</tbody></table></div>';
+}
+
+function renderTable2(rows) {
+  let h = '<div class="table-wrap"><table class="searchable"><thead><tr><th class="stt">#</th><th>Tiếng Nhật</th><th>Phiên âm</th><th>Nghĩa</th><th>Audio</th></tr></thead><tbody>';
+  rows.forEach((r, i) => {
+    const hira = toHiragana(r[0]);
+    const display = toRuby(r[0]);
+    const showHira = hira !== r[0].trim();
+    h += `<tr><td class="stt">${i+1}</td><td class="tu-vung">${display}</td><td class="phien-am">${showHira ? hira : ''}</td><td class="nghia">${r[1]}</td>${audioCell(r[0], false)}</tr>`;
+  });
+  return h + '</tbody></table></div>';
+}
+
+function renderLesson(num) {
+  const l = LESSONS[num];
+  if (!l) { contentEl.innerHTML = '<div class="empty">Không tìm thấy bài.</div>'; return; }
+
+  titleEl.textContent = `Bài ${num}`;
+  metaEl.textContent = l.title;
+
+  const total = l.vocab.length + l.sentences.length + l.countries.length + l.proper_nouns.length;
+  summaryEl.innerHTML = `
+    <span class="badge">Từ vựng: <b>${l.vocab.length}</b></span>
+    <span class="badge">Mẫu câu: <b>${l.sentences.length}</b></span>
+    <span class="badge">Tên nước: <b>${l.countries.length}</b></span>
+    <span class="badge">Tên riêng: <b>${l.proper_nouns.length}</b></span>
+    <span class="badge">Tổng: <b>${total}</b></span>`;
+
+  let html = '';
+  if (l.vocab.length) html += '<h2>1. Từ vựng chính</h2>' + renderTable4(l.vocab);
+  if (l.sentences.length) html += '<h2>2. Mẫu câu / Cụm hội thoại</h2>' + renderTable2(l.sentences);
+  if (l.countries.length) html += '<h2>3. Tên nước / Từ ngắn</h2>' + renderTable2(l.countries);
+  if (l.proper_nouns.length) html += '<h2>4. Tên riêng</h2>' + renderTable2(l.proper_nouns);
+  if (!html) html = '<div class="empty">Bài này chưa có dữ liệu.</div>';
+  contentEl.innerHTML = html;
+
+  bindAudioButtons();
+  searchEl.value = '';
+
+  document.querySelectorAll('.lesson-btn').forEach(b => {
+    b.classList.toggle('active', parseInt(b.dataset.lesson) === num);
+  });
+
+  // Lưu state
+  localStorage.setItem('study-japan-lesson', num);
+  history.replaceState(null, '', `#bai-${num}`);
+
+  document.getElementById('sidebar').classList.remove('open');
+}
+
+// === Sidebar nav ===
+document.querySelectorAll('.lesson-btn').forEach(btn => {
+  btn.addEventListener('click', () => renderLesson(parseInt(btn.dataset.lesson)));
+});
+
+document.getElementById('toggle-aside').addEventListener('click', () => {
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+// === Search trong bài ===
+searchEl.addEventListener('input', e => {
+  const q = e.target.value.toLowerCase().trim();
+  document.querySelectorAll('table.searchable tbody tr').forEach(r => {
+    r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none';
+  });
+});
+
+// === TTS ===
+const voiceInfo = document.getElementById('voice-info');
+let jaVoice = null;
+
+function pickJaVoice() {
+  const voices = speechSynthesis.getVoices();
+  const preferred = ['Kyoko', 'Otoya', 'O-ren', 'Hattori'];
+  for (const name of preferred) {
+    const v = voices.find(v => v.name.includes(name));
+    if (v) return v;
+  }
+  return voices.find(v => v.lang === 'ja-JP') || voices.find(v => v.lang.startsWith('ja')) || null;
+}
+
+function updateVoiceInfo() {
+  jaVoice = pickJaVoice();
+  if (jaVoice) {
+    voiceInfo.textContent = `🔊 ${jaVoice.name} (${jaVoice.lang})`;
+    voiceInfo.style.color = '#16a085';
+  } else {
+    voiceInfo.textContent = '⚠️ Chưa có giọng tiếng Nhật';
+    voiceInfo.style.color = '#e74c3c';
+  }
+}
+updateVoiceInfo();
+if (speechSynthesis.onvoiceschanged !== undefined) {
+  speechSynthesis.onvoiceschanged = updateVoiceInfo;
+}
+
+setInterval(() => {
+  if (speechSynthesis.speaking) { speechSynthesis.pause(); speechSynthesis.resume(); }
+}, 10000);
+
+let currentBtn = null;
+function doSpeak(text, rate, btn) {
+  const cleanText = text.replace(/[～~]/g, '').trim();
+  const u = new SpeechSynthesisUtterance(cleanText);
+  u.lang = 'ja-JP';
+  u.rate = rate;
+  u.pitch = 1; u.volume = 1;
+  if (jaVoice) u.voice = jaVoice;
+  btn.classList.add('playing');
+  currentBtn = btn;
+  const cleanup = () => {
+    btn.classList.remove('playing');
+    if (currentBtn === btn) currentBtn = null;
+  };
+  u.onend = cleanup;
+  u.onerror = (e) => { console.warn('TTS error:', e.error); cleanup(); };
+  speechSynthesis.speak(u);
+}
+
+function speak(text, rate, btn) {
+  if (speechSynthesis.paused) speechSynthesis.resume();
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    speechSynthesis.cancel();
+    if (currentBtn) currentBtn.classList.remove('playing');
+    setTimeout(() => doSpeak(text, rate, btn), 120);
+  } else {
+    doSpeak(text, rate, btn);
+  }
+  if (!jaVoice && speechSynthesis.getVoices().length > 0) updateVoiceInfo();
+}
+
+function bindAudioButtons() {
+  document.querySelectorAll('.btn-play').forEach(btn => {
+    btn.addEventListener('click', () => {
+      speak(btn.dataset.text, parseFloat(btn.dataset.rate), btn);
+    });
+  });
+}
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden && speechSynthesis.paused) speechSynthesis.resume();
+});
+
+// === Init: load lesson từ hash hoặc localStorage hoặc bài 1 ===
+function getInitialLesson() {
+  const hash = window.location.hash.match(/bai-(\d+)/);
+  if (hash) return parseInt(hash[1]);
+  const saved = parseInt(localStorage.getItem('study-japan-lesson'));
+  if (saved >= 1 && saved <= 25) return saved;
+  return 1;
+}
+renderLesson(getInitialLesson());
+</script>
+</body>
+</html>
